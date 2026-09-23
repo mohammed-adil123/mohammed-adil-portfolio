@@ -1,38 +1,69 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import Lenis from 'lenis';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
 import { TopNavbar } from './components/layout/TopNavbar';
 import { MobileDrawer } from './components/layout/MobileDrawer';
-import { Footer } from './components/layout/Footer';
-import { HeroSection } from './components/hero/HeroSection';
-import { SkillsMatrix } from './components/skills/SkillsMatrix';
-import { ProjectsSection } from './components/projects/ProjectsSection';
+import { HeroSpydyySection } from './components/hero/HeroSpydyySection';
+import { CrissCrossMarquee } from './components/common/CrissCrossMarquee';
 import { AboutSection } from './components/experience/AboutSection';
-import { BlogSection } from './components/blog/BlogSection';
+import { ProjectsSection } from './components/projects/ProjectsSection';
+import { SkillsMatrix } from './components/skills/SkillsMatrix';
+import { ExperienceSection } from './components/experience/ExperienceSection';
 import { ContactSection } from './components/contact/ContactSection';
-import { CvModal } from './components/common/CvModal';
-import { FloatingCTA } from './components/common/FloatingCTA';
+import { Footer } from './components/layout/Footer';
+import { CustomCursor } from './components/common/CustomCursor';
+import { Preloader } from './components/common/Preloader';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export function App() {
   const [activeSection, setActiveSection] = useState<string>('hero');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
-  const [isCvModalOpen, setIsCvModalOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Smooth scroll to section
+  // Initialize Lenis smooth scroll and synchronize with GSAP ScrollTrigger
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+    });
+
+    lenis.on('scroll', ScrollTrigger.update);
+
+    const updateTicker = (time: number) => {
+      lenis.raf(time * 1000);
+    };
+
+    gsap.ticker.add(updateTicker);
+    gsap.ticker.lagSmoothing(0);
+
+    return () => {
+      gsap.ticker.remove(updateTicker);
+      lenis.destroy();
+      ScrollTrigger.getAll().forEach((t) => t.kill());
+    };
+  }, []);
+
+  // Smooth section navigation
   const handleNavigate = (sectionId: string) => {
     setActiveSection(sectionId);
     const element = document.getElementById(sectionId);
     if (element) {
-      const navOffset = 70;
+      const navOffset = sectionId === 'hero' ? 0 : 70;
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - navOffset;
       window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
     }
   };
 
-  // IntersectionObserver to track active section while scrolling
+  // Section observer to track active section while scrolling
   useEffect(() => {
-    const sections = ['hero', 'skills', 'projects', 'about', 'experience', 'education', 'blog', 'contact'];
+    const sections = ['hero', 'about', 'projects', 'skills', 'experience', 'contact'];
     const handleScroll = () => {
-      const scrollPos = window.scrollY + 200;
+      const scrollPos = window.scrollY + 250;
       for (const sectionId of sections) {
         const el = document.getElementById(sectionId);
         if (el) {
@@ -50,55 +81,57 @@ export function App() {
   }, []);
 
   return (
-    <div className="min-h-screen text-on-surface selection:bg-[rgba(124,58,237,0.30)] selection:text-white flex flex-col font-sans relative" style={{ background: '#05050f' }}>
+    <div className="min-h-screen bg-[#030308] text-[#f5f5f7] flex flex-col font-sans relative selection:bg-[#ff2a55]/30 selection:text-white">
+      {/* Subtle film grain noise overlay */}
+      <div className="noise-overlay" />
 
-      {/* ── ANIMATED AURORA BLOBS (fixed, behind everything) ── */}
-      <div className="aurora-blob-1" />
-      <div className="aurora-blob-2" />
-      <div className="aurora-blob-3" />
-      <div className="aurora-blob-4" />
+      {/* Luxury minimal preloader */}
+      {isLoading && <Preloader onComplete={() => setIsLoading(false)} />}
+
+      {/* Custom magnetic spring cursor */}
+      <CustomCursor />
 
       {/* Top sticky navigation */}
       <TopNavbar
         activeSection={activeSection}
         onNavigate={handleNavigate}
         onOpenMobileMenu={() => setIsMobileMenuOpen(true)}
-        onOpenCvModal={() => setIsCvModalOpen(true)}
       />
 
-      {/* Mobile drawer menu */}
+      {/* Fullscreen mobile drawer */}
       <MobileDrawer
         isOpen={isMobileMenuOpen}
         activeSection={activeSection}
         onClose={() => setIsMobileMenuOpen(false)}
         onNavigate={handleNavigate}
-        onOpenCvModal={() => setIsCvModalOpen(true)}
       />
 
       {/* Main page content sections */}
       <main className="flex-1 relative z-10">
-        <HeroSection
-          onNavigate={handleNavigate}
-          onOpenCvModal={() => setIsCvModalOpen(true)}
-        />
-        <SkillsMatrix />
+        {/* Section 01: Spydyy-Inspired Superhero Mask Spotlight Reveal Hero */}
+        <HeroSpydyySection onNavigate={handleNavigate} />
+
+        {/* Dual Criss-Crossing 3D Angled Marquees (+4deg / -4deg) */}
+        <CrissCrossMarquee />
+
+        {/* Section 02: About Mohammed Adil */}
+        <AboutSection onNavigate={handleNavigate} />
+
+        {/* Section 03: Selected Work Editorial Showcase */}
         <ProjectsSection />
-        <AboutSection activeSection={activeSection} />
-        <BlogSection />
+
+        {/* Section 04: Skills Matrix (Interactive Typography) */}
+        <SkillsMatrix />
+
+        {/* Section 05: Experience, Education & Certifications */}
+        <ExperienceSection />
+
+        {/* Section 06: Have an Idea? Contact Section & Final CTA */}
         <ContactSection />
       </main>
 
-      {/* Footer */}
+      {/* Minimal Editorial Footer */}
       <Footer onNavigate={handleNavigate} />
-
-      {/* Floating animated CTA + Scroll-to-top */}
-      <FloatingCTA onContactClick={() => handleNavigate('contact')} />
-
-      {/* Curriculum Vitae Modal */}
-      <CvModal
-        isOpen={isCvModalOpen}
-        onClose={() => setIsCvModalOpen(false)}
-      />
     </div>
   );
 }

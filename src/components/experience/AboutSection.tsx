@@ -1,157 +1,147 @@
-import React, { useState, useEffect } from 'react';
-import { PERSONAL_INFO } from '../../data/portfolioData';
-import { ExperienceTimeline } from './ExperienceTimeline';
-import { EducationCard } from './EducationCard';
-import { Terminal, UserCheck, GraduationCap, Briefcase, Target, Compass, Sparkles } from 'lucide-react';
+import React from 'react';
+import { ArrowUpRight, Code, Brain, Sparkles, Award } from 'lucide-react';
 
 interface AboutSectionProps {
-  activeSection?: string;
+  onNavigate: (sectionId: string) => void;
 }
 
-export const AboutSection: React.FC<AboutSectionProps> = ({ activeSection }) => {
-  const [activeTab, setActiveTab] = useState<'experience' | 'education'>('experience');
+export const AboutSection: React.FC<AboutSectionProps> = ({ onNavigate }) => {
+  const telemetryStats = [
+    { label: 'B.Tech CGPA', value: '7.56', context: 'NMAMIT Nitte (ISE)' },
+    { label: 'Pre-University', value: '87.25%', context: 'PCMC Science Honors' },
+    { label: 'DSA & Problems', value: '400+', context: 'LeetCode & Algorithmic Rigor' },
+    { label: 'Production Work', value: 'Agnirva', context: 'Software Intern (AICTE NEAT)' },
+  ];
 
-  useEffect(() => {
-    if (activeSection === 'education') {
-      setActiveTab('education');
-    } else if (activeSection === 'experience') {
-      setActiveTab('experience');
-    }
-  }, [activeSection]);
+  const pillars = [
+    {
+      icon: Code,
+      title: 'Full-Stack Systems',
+      description: 'Architecting robust web applications with Flask, Node.js, React, and RESTful APIs with 3NF normalized databases and transactional data integrity.',
+    },
+    {
+      icon: Brain,
+      title: 'Machine Learning & Vision',
+      description: 'Building end-to-end predictive pipelines with Scikit-Learn and automated biomedical image processing using OpenCV adaptive thresholding.',
+    },
+    {
+      icon: Sparkles,
+      title: 'Interactive Web Craft',
+      description: 'Creating memorable digital experiences that combine performance, smooth 60fps animations (GSAP, Lenis), and tactile micro-interactions.',
+    },
+    {
+      icon: Award,
+      title: 'Quality & Specifications',
+      description: 'Authoring Product Requirements Documents (PRDs), BRDs, and integrating WCAG accessibility standards to eliminate release defects.',
+    },
+  ];
 
   return (
-    <section id="about" className="py-24 relative border-t border-border-subtle/40">
-      {/* Background ambient lighting */}
-      <div className="absolute top-1/2 left-10 w-96 h-96 bg-accent-violet/5 rounded-full blur-3xl pointer-events-none" />
-
-      <div className="max-w-[1240px] mx-auto px-4 sm:px-6 relative z-10">
+    <section id="about" className="relative py-28 md:py-36 bg-[#030308] border-b border-white/[0.06]">
+      <div className="max-w-7xl mx-auto px-6 md:px-12">
         {/* Section Header */}
-        <div className="mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-violet/10 border border-accent-violet/20 text-accent-violet text-xs font-mono mb-3">
-            <Terminal className="w-3.5 h-3.5" />
-            <span>// PROFILE &amp; BACKGROUND</span>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ff2a55]" />
+              <span className="font-mono text-xs text-[#ff2a55] tracking-[0.25em] uppercase font-semibold">
+                Section 02 // Philosophy
+              </span>
+            </div>
+            <h2 className="font-editorial text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-none">
+              MORE THAN A DEVELOPER.
+            </h2>
           </div>
-          <h2 className="text-3xl md:text-4xl font-display font-bold text-text-primary tracking-tight">
-            Engineering Journey &amp; Foundations
-          </h2>
-          <p className="text-text-secondary text-sm md:text-base mt-2 max-w-2xl">
-            Undergraduate in Information Science &amp; Engineering passionate about building reliable software, automated inventory pipelines, and applied machine learning tools.
+          <p className="font-mono text-xs sm:text-sm text-white/50 max-w-sm tracking-wide">
+            Combining software engineering, machine learning pipelines, and luxury interactive design.
           </p>
         </div>
 
-        {/* Top Philosophy & Availability Banner */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
-          {/* Engineering Philosophy */}
-          <div className="lg:col-span-2 glass-panel p-6 sm:p-8 rounded-xl border-border-subtle flex flex-col justify-between">
-            <div>
-              <div className="flex items-center gap-2 text-xs font-mono text-accent-blue mb-3">
-                <Compass className="w-4 h-4" />
-                <span>ENGINEERING PHILOSOPHY</span>
-              </div>
-              <h3 className="text-xl sm:text-2xl font-display font-semibold text-text-primary mb-4 leading-snug">
-                Core Computer Science Rigor + Practical Application
-              </h3>
-              <p className="text-text-secondary text-sm sm:text-base leading-relaxed mb-4">
-                {PERSONAL_INFO.bioLong}
-              </p>
-              <p className="text-text-secondary text-sm sm:text-base leading-relaxed">
-                Dedicated to writing clean, maintainable code with strict relational database normalization (3NF), automated verification cycles, and user-centric accessibility guidelines (WCAG).
-              </p>
-            </div>
+        {/* Narrative Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+          {/* Left Column: Editorial Statement */}
+          <div className="lg:col-span-7 space-y-6">
+            <p className="font-display text-xl sm:text-2xl text-white/90 font-medium leading-relaxed">
+              I build digital experiences that combine <span className="text-[#ff2a55] font-semibold">engineering rigor</span>, intuitive design, and purposeful interaction.
+            </p>
 
-            <div className="mt-6 pt-4 border-t border-border-subtle/80 flex flex-wrap items-center gap-4 text-xs font-mono text-text-muted">
-              <span className="flex items-center gap-1.5 text-text-secondary">
-                <Target className="w-3.5 h-3.5 text-accent-cyan" />
-                Focus: Systems Engineer &amp; Full-Stack
-              </span>
-              <span>•</span>
-              <span className="flex items-center gap-1.5 text-text-secondary">
-                <Sparkles className="w-3.5 h-3.5 text-accent-emerald" />
-                Target: Systems Engineer / Software Developer
-              </span>
+            <p className="font-sans text-sm sm:text-base text-white/70 leading-relaxed">
+              Currently an Information Science &amp; Engineering undergraduate at{' '}
+              <span className="text-white font-medium">NMAM Institute of Technology, Nitte</span>. My work spans full-stack development, machine learning algorithms, and software quality assurance. During my software engineering internship at{' '}
+              <span className="text-white font-medium">Agnirva (onboarded via AICTE NEAT 5.0)</span>, I authored enterprise Product Requirements Documents (PRD/BRD) and structured QA validation frameworks adhering to WCAG standards.
+            </p>
+
+            <p className="font-sans text-sm sm:text-base text-white/70 leading-relaxed">
+              Whether architecting a 3NF normalized inventory system with sub-50ms query latency, training regression models to minimize real estate pricing error, or developing computer vision tools for bacterial colony counting on Petri dish cultures, my focus is always on engineering precision and user-first clarity.
+            </p>
+
+            {/* Quick CTA cluster */}
+            <div className="pt-4 flex flex-wrap items-center gap-4">
+              <button
+                onClick={() => onNavigate('projects')}
+                className="btn-editorial-primary"
+                data-cursor="VIEW"
+              >
+                <span>Explore Projects</span>
+                <ArrowUpRight className="w-4 h-4" />
+              </button>
+              <a
+                href="/Mohammed_Adil_Resume.pdf"
+                target="_blank"
+                rel="noreferrer"
+                className="btn-editorial-outline"
+                data-cursor="LINK"
+              >
+                <span>Download Resume</span>
+              </a>
             </div>
           </div>
 
-          {/* Recruiter Availability Card */}
-          <div className="glass-panel p-6 sm:p-8 rounded-xl border-accent-blue/30 bg-gradient-to-br from-surface-elevated/70 to-surface-base flex flex-col justify-between">
-            <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-emerald/10 border border-accent-emerald/20 text-accent-emerald text-xs font-mono mb-4">
-                <span className="w-2 h-2 rounded-full bg-accent-emerald animate-pulse" />
-                <span>RECRUITER STATUS</span>
-              </div>
-              <h4 className="text-lg font-display font-bold text-text-primary mb-2">
-                Systems Engineer Aspirant
-              </h4>
-              <p className="text-xs text-text-secondary leading-relaxed mb-4">
-                {PERSONAL_INFO.status}
-              </p>
-
-              <div className="space-y-2 text-xs font-mono">
-                <div className="p-2.5 rounded-lg bg-surface-base/80 border border-border-subtle flex justify-between items-center">
-                  <span className="text-text-muted">Location</span>
-                  <span className="text-text-primary font-medium">{PERSONAL_INFO.location}</span>
+          {/* Right Column: Key Pillars */}
+          <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
+            {pillars.map((pillar, idx) => {
+              const Icon = pillar.icon;
+              return (
+                <div
+                  key={idx}
+                  className="editorial-card p-6 group hover:border-[#ff2a55]/40 transition-all"
+                  data-cursor="EXPLORE"
+                >
+                  <div className="flex items-center gap-3 mb-2.5">
+                    <div className="p-2 rounded-lg bg-[#ff2a55]/10 text-[#ff2a55] group-hover:bg-[#ff2a55] group-hover:text-white transition-colors">
+                      <Icon className="w-4 h-4" />
+                    </div>
+                    <h3 className="font-display text-base font-bold text-white tracking-tight">
+                      {pillar.title}
+                    </h3>
+                  </div>
+                  <p className="font-sans text-xs text-white/60 leading-relaxed">
+                    {pillar.description}
+                  </p>
                 </div>
-                <div className="p-2.5 rounded-lg bg-surface-base/80 border border-border-subtle flex justify-between items-center">
-                  <span className="text-text-muted">College</span>
-                  <span className="text-text-primary font-medium">NMAMIT, Nitte</span>
-                </div>
-                <div className="p-2.5 rounded-lg bg-surface-base/80 border border-border-subtle flex justify-between items-center">
-                  <span className="text-text-muted">Degree</span>
-                  <span className="text-text-primary font-medium">B.Tech ISE (CGPA: {PERSONAL_INFO.cgpa})</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-6 pt-4 border-t border-border-subtle flex items-center gap-2 text-xs font-mono text-accent-blue">
-              <UserCheck className="w-4 h-4" />
-              <span>Full Work Authorization in India</span>
-            </div>
+              );
+            })}
           </div>
         </div>
 
-        {/* Tabs switcher for Experience vs Education on Mobile/Tablet */}
-        <div className="flex sm:hidden mb-6 p-1 rounded-lg bg-surface-elevated border border-border-subtle">
-          <button
-            onClick={() => setActiveTab('experience')}
-            className={`flex-1 py-2 text-xs font-mono rounded-md transition-all ${
-              activeTab === 'experience'
-                ? 'bg-accent-blue text-white font-medium'
-                : 'text-text-muted'
-            }`}
-          >
-            Experience &amp; Leadership
-          </button>
-          <button
-            onClick={() => setActiveTab('education')}
-            className={`flex-1 py-2 text-xs font-mono rounded-md transition-all ${
-              activeTab === 'education'
-                ? 'bg-accent-blue text-white font-medium'
-                : 'text-text-muted'
-            }`}
-          >
-            Education &amp; Certs
-          </button>
-        </div>
-
-        {/* 2-Column Responsive Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Left Column: Experience Timeline */}
-          <div id="experience" className={`lg:col-span-7 scroll-mt-24 ${activeTab === 'education' ? 'hidden sm:block' : 'block'}`}>
-            <div className="flex items-center gap-2 text-xs font-mono uppercase text-text-muted mb-6">
-              <Briefcase className="w-4 h-4 text-accent-blue" />
-              <span>Experience &amp; Technical Leadership</span>
+        {/* Dynamic Telemetry Metrics Strip */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 pt-12 border-t border-white/[0.08]">
+          {telemetryStats.map((stat, idx) => (
+            <div
+              key={idx}
+              className="editorial-card p-6 text-center space-y-1.5 hover:border-[#ff2a55]/40"
+            >
+              <div className="font-editorial text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+                {stat.value}
+              </div>
+              <div className="font-mono text-xs font-semibold text-[#ff2a55] uppercase tracking-wider">
+                {stat.label}
+              </div>
+              <div className="font-sans text-[11px] text-white/40">
+                {stat.context}
+              </div>
             </div>
-            <ExperienceTimeline />
-          </div>
-
-          {/* Right Column: Academic Degree & Certifications */}
-          <div id="education" className={`lg:col-span-5 scroll-mt-24 ${activeTab === 'experience' ? 'hidden sm:block' : 'block'}`}>
-            <div className="flex items-center gap-2 text-xs font-mono uppercase text-text-muted mb-6">
-              <GraduationCap className="w-4 h-4 text-accent-violet" />
-              <span>Academic Track &amp; Certifications</span>
-            </div>
-            <EducationCard />
-          </div>
+          ))}
         </div>
       </div>
     </section>

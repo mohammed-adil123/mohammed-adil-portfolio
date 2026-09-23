@@ -1,123 +1,121 @@
 import React, { useState } from 'react';
 import { SKILL_CATEGORIES } from '../../data/portfolioData';
-import { Code, Layers, Database, Cloud, Cpu, Wrench, CheckCircle2, Terminal } from 'lucide-react';
+import { Code, Layers, Cpu, Database, ShieldCheck, Sparkles } from 'lucide-react';
 
-const iconMap: Record<string, React.ReactNode> = {
-  Code: <Code className="w-5 h-5 text-accent-blue" />,
-  Layers: <Layers className="w-5 h-5 text-accent-violet" />,
-  Database: <Database className="w-5 h-5 text-accent-cyan" />,
-  Cloud: <Cloud className="w-5 h-5 text-accent-blue" />,
-  Cpu: <Cpu className="w-5 h-5 text-accent-purple" />,
-  Wrench: <Wrench className="w-5 h-5 text-accent-emerald" />
+const categoryIcons = {
+  'Programming Languages': Code,
+  'Web Technologies & Frameworks': Layers,
+  'Machine Learning & Data': Cpu,
+  'Databases & Storage': Database,
+  'Core Computer Science Concepts': ShieldCheck,
+  'Development Tools & Practices': Sparkles,
 };
 
 export const SkillsMatrix: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<string>('All');
+  const [activeSkillHover, setActiveSkillHover] = useState<string | null>(null);
 
-  const filteredCategories = activeCategory === 'All' 
-    ? SKILL_CATEGORIES 
-    : SKILL_CATEGORIES.filter(c => c.name === activeCategory);
+  const categories = ['All', ...SKILL_CATEGORIES.map((c) => c.name)];
+
+  const displayedCategories = activeCategory === 'All'
+    ? SKILL_CATEGORIES
+    : SKILL_CATEGORIES.filter((c) => c.name === activeCategory);
 
   return (
-    <section id="skills" className="py-24 relative border-t border-border-subtle/40">
-      {/* Background glow */}
-      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 bg-accent-blue/5 rounded-full blur-3xl pointer-events-none" />
-
-      <div className="max-w-[1240px] mx-auto px-4 sm:px-6 relative z-10">
+    <section id="skills" className="py-28 md:py-36 bg-[#030308] border-b border-white/[0.06]">
+      <div className="max-w-7xl mx-auto px-6 md:px-12">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-blue/10 border border-accent-blue/20 text-accent-blue text-xs font-mono mb-3">
-              <Terminal className="w-3.5 h-3.5" />
-              <span>// TECHNICAL ARSENAL</span>
+            <div className="flex items-center gap-2 mb-3">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ff2a55]" />
+              <span className="font-mono text-xs text-[#ff2a55] tracking-[0.25em] uppercase font-semibold">
+                Section 04 // Capabilities
+              </span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-display font-bold text-text-primary tracking-tight">
-              Core Competencies &amp; Stack
+            <h2 className="font-editorial text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-none">
+              SKILLS &amp; STACK.
             </h2>
-            <p className="text-text-secondary text-sm md:text-base mt-2 max-w-xl">
-              Strong foundations in Python, Java, SQL, Data Structures &amp; Algorithms, RESTful APIs, and Software Engineering methodologies.
-            </p>
           </div>
-
-          {/* Quick category switcher */}
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => setActiveCategory('All')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all ${
-                activeCategory === 'All'
-                  ? 'bg-accent-blue text-white shadow-sm shadow-accent-blue/20'
-                  : 'bg-surface-elevated/60 text-text-muted hover:text-text-primary border border-border-subtle'
-              }`}
-            >
-              All ({SKILL_CATEGORIES.reduce((acc, cat) => acc + cat.skills.length, 0)})
-            </button>
-            {SKILL_CATEGORIES.map(cat => (
-              <button
-                key={cat.name}
-                onClick={() => setActiveCategory(cat.name)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all ${
-                  activeCategory === cat.name
-                    ? 'bg-accent-blue text-white shadow-sm shadow-accent-blue/20'
-                    : 'bg-surface-elevated/60 text-text-muted hover:text-text-primary border border-border-subtle'
-                }`}
-              >
-                {cat.name}
-              </button>
-            ))}
-          </div>
+          <p className="font-mono text-xs sm:text-sm text-white/50 max-w-sm tracking-wide">
+            Interactive typography showcase across algorithmic foundations, full-stack systems, and machine learning.
+          </p>
         </div>
 
-        {/* Skills Grid */}
+        {/* Category Filter Tabs */}
+        <div className="flex flex-wrap items-center gap-2 mb-12">
+          {categories.map((cat) => {
+            const isActive = activeCategory === cat;
+            return (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-4 py-2 rounded-full font-mono text-xs tracking-wider uppercase transition-all duration-300 ${
+                  isActive
+                    ? 'bg-[#ff2a55] text-white shadow-[0_0_16px_rgba(255,42,85,0.4)]'
+                    : 'bg-white/[0.03] text-white/60 hover:text-white hover:bg-white/[0.08] border border-white/[0.06]'
+                }`}
+                data-cursor="LINK"
+              >
+                {cat}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Interactive Typography Grid (No generic percentage bars) */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredCategories.map((category) => (
-            <div
-              key={category.name}
-              className="glass-panel p-6 rounded-xl hover:border-accent-blue/30 transition-all duration-300 group flex flex-col justify-between"
-            >
-              <div>
-                <div className="flex items-center justify-between pb-4 mb-4 border-b border-border-subtle">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2.5 rounded-xl bg-surface-elevated border border-border-subtle group-hover:border-accent-blue/40 group-hover:bg-accent-blue/5 transition-all">
-                      {iconMap[category.icon] || <Code className="w-5 h-5 text-accent-blue" />}
+          {displayedCategories.map((cat) => {
+            const Icon = categoryIcons[cat.name as keyof typeof categoryIcons] || Code;
+            return (
+              <div
+                key={cat.name}
+                className="editorial-card p-6 md:p-8 flex flex-col justify-between hover:border-[#ff2a55]/40 transition-all duration-300 group"
+              >
+                <div>
+                  <div className="flex items-center gap-3 mb-6 pb-4 border-b border-white/[0.06]">
+                    <div className="p-2 rounded-lg bg-[#ff2a55]/10 text-[#ff2a55] group-hover:bg-[#ff2a55] group-hover:text-white transition-colors">
+                      <Icon className="w-5 h-5" />
                     </div>
-                    <div>
-                      <h3 className="text-base font-semibold text-text-primary group-hover:text-accent-blue transition-colors">
-                        {category.name}
-                      </h3>
-                      <span className="text-[11px] font-mono text-text-muted">
-                        {category.skills.length} competencies
-                      </span>
-                    </div>
+                    <h3 className="font-editorial text-base font-bold text-white tracking-wide">
+                      {cat.name}
+                    </h3>
+                  </div>
+
+                  {/* Skills Typography Cluster */}
+                  <div className="flex flex-wrap gap-2.5">
+                    {cat.skills.map((skill) => {
+                      const isHovered = activeSkillHover === skill.name;
+                      return (
+                        <div
+                          key={skill.name}
+                          onMouseEnter={() => setActiveSkillHover(skill.name)}
+                          onMouseLeave={() => setActiveSkillHover(null)}
+                          className={`px-3 py-1.5 rounded-lg border font-mono text-xs transition-all duration-200 cursor-default ${
+                            isHovered
+                              ? 'border-[#ff2a55] bg-[#ff2a55]/15 text-white shadow-[0_0_12px_rgba(255,42,85,0.3)] scale-105'
+                              : 'border-white/[0.08] bg-white/[0.02] text-white/80 hover:border-white/20'
+                          }`}
+                        >
+                          <span className="font-semibold text-white">{skill.name}</span>
+                          {skill.tag && (
+                            <span className="ml-1.5 text-[10px] text-white/40">
+                              • {skill.tag}
+                            </span>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-2 pt-1">
-                  {category.skills.map((skill) => (
-                    <div
-                      key={skill.name}
-                      className="px-2.5 py-1.5 rounded-lg bg-surface-elevated/80 border border-border-subtle hover:border-border-muted transition-all flex items-center gap-2"
-                    >
-                      <span className="text-xs font-medium text-text-primary">{skill.name}</span>
-                      {skill.tag && (
-                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-surface-base text-text-muted border border-border-subtle/60">
-                          {skill.tag}
-                        </span>
-                      )}
-                    </div>
-                  ))}
+                <div className="pt-6 mt-6 border-t border-white/[0.06] flex items-center justify-between text-[11px] font-mono text-white/40">
+                  <span>{cat.skills.length} TECHNOLOGIES</span>
+                  <span className="text-[#ff2a55]">BENCHMARKED</span>
                 </div>
               </div>
-
-              {/* Bottom indicator */}
-              <div className="mt-6 pt-3 border-t border-border-subtle/50 flex items-center justify-between text-[11px] font-mono text-text-muted">
-                <span className="flex items-center gap-1.5 text-accent-emerald">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  Production Ready
-                </span>
-                <span className="text-text-muted/60">Verified via projects</span>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
